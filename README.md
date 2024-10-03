@@ -77,15 +77,6 @@ python manage.py migrate
   <pre><code>docker-compose down</code></pre>
   <p>This will stop and remove the containers when you're finished.</p>
 
-  <h2>Environment Variables</h2>
-  <p>Make sure to configure the following environment variables in your <code>.env</code> file or directly in Docker Compose for your application to run:</p>
-  <ul>
-    <li><strong>DEBUG</strong>: Set to 1 for development, 0 for production</li>
-    <li><strong>DJANGO_DB_HOST</strong>: The hostname for the database (e.g., <code>db</code> in Docker Compose)</li>
-    <li><strong>DJANGO_DB_NAME</strong>: The name of your PostgreSQL or MySQL database</li>
-    <li><strong>DJANGO_DB_USER</strong>: Your database username</li>
-    <li><strong>DJANGO_DB_PASSWORD</strong>: Your database password</li>
-  </ul>
 
   <h2>File Structure</h2>
   <p>The following is the file structure of the project:</p>
