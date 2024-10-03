@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block content %}
+
+        {% if messages %}
+            <ul class="mb-4">
+                {% for message in messages %}
+                    <li class="{% if message.tags == 'error' %}text-red-500{% else %}text-green-500{% endif %}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+<div class=" max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6 mb-6">
+      <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Update Profile</h2>
+  
+      <div class="flex justify-center mb-6">
+        {% if user.profile.profile_picture %}
+            <img class="rounded-full w-32 h-32 object-cover shadow-md" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+            <button id="deleteImageBtn" class="mt-4 text-sm text-red-500 hover:underline">Delete Image</button>
+        {% else %}
+            <p>No profile picture uploaded.</p>
+        {% endif %}
+    </div>
+
+      <form id="profile-update-form" method="post" enctype="multipart/form-data" onsubmit="return validateProfileUpdateForm();">
+        {% csrf_token %}
+        
+        <div class="mb-4">
+          <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+          <input type="text" name="username" id="username" value="{{ user.username }}" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <p id="username-error" class="text-red-500 text-sm mt-1 hidden">Username is required.</p>
+        </div>
+        
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" name="email" id="email" value="{{ user.email }}" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <p id="email-error" class="text-red-500 text-sm mt-1 hidden">Email is required.</p>
+        </div>
+        
+        <div class="mb-4">
+          <label for="profile_picture" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+          <input type="file" name="profile_picture" id="profile_picture" class="mt-1 p-2 block w-full">
+        </div>
+        
+        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg font-semibold">Update Profile</button>
+      </form>
+    </div>
+    <div id="deleteImageModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 class="text-xl font-bold mb-4">Delete Profile Image</h2>
+            <p>Are you sure you want to delete your profile image?</p>
+            <div class="mt-6 flex justify-center space-x-4">
+                <button id="confirmDeleteBtn" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600">Yes, Delete</button>
+                <button id="cancelDeleteBtn" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600">Cancel</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+
+function validateProfileUpdateForm() {
+    let isValid = true;
+
+    const username = document.getElementById('username');
+    const email = document.getElementById('email');
+    const usernameError = document.getElementById('username-error');
+    const emailError = document.getElementById('email-error');
+
+    if (username.value.trim() === "") {
+        usernameError.classList.remove('hidden');
+        isValid = false;
+    } else {
+        usernameError.classList.add('hidden');
+    }
+
+    if (email.value.trim() === "") {
+        emailError.classList.remove('hidden');
+        isValid = false;
+    } else {
+        emailError.classList.add('hidden');
+    }
+
+    return isValid;
+}
+
+    const deleteImageBtn = document.getElementById('deleteImageBtn');
+    const deleteImageModal = document.getElementById('deleteImageModal');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+    deleteImageBtn.addEventListener('click', function() {
+        deleteImageModal.classList.remove('hidden');
+    });
+
+    cancelDeleteBtn.addEventListener('click', function() {
+        deleteImageModal.classList.add('hidden');
+    });
+
+    confirmDeleteBtn.addEventListener('click', function() {
+        fetch('{% url "delete_profile_image" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: 'delete' })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); 
+                alert('Error deleting image');
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

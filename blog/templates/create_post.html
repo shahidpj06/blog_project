@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Post{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Create Blog Post</h2>
+      
+      {% if messages %}
+            <ul class="mb-4">
+                {% for message in messages %}
+                    <li class="{% if message.tags == 'error' %}text-red-500{% else %}text-green-500{% endif %}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form id="create-post-form" method="post" onsubmit="return validateCreatePostForm();">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                <input type="text" name="title" id="title"  class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p id="title-error" class="text-red-500 text-sm mt-1 hidden">Title is required.</p>
+            </div>
+            <div class="mb-4">
+                <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
+                <textarea name="content" rows="6" id="content"  class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                <p id="content-error" class="text-red-500 text-sm mt-1 hidden">Content is required.</p>
+            </div>
+            <div class="mb-4">
+                <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                <input type="text" name="tags" id="tags" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p id="tags-error" class="text-red-500 text-sm mt-1 hidden">At least one tag is required.</p>
+            </div>    
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg font-semibold">Create Post</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function validateCreatePostForm() {
+        let isValid = true;
+    
+        const title = document.getElementById('title');
+        const content = document.getElementById('content');
+        const tags = document.getElementById('tags');
+    
+        const titleError = document.getElementById('title-error');
+        const contentError = document.getElementById('content-error');
+        const tagsError = document.getElementById('tags-error');
+    
+        // Validate Title
+        if (title.value.trim() === "") {
+            titleError.classList.remove('hidden');
+            isValid = false;
+        } else {
+            titleError.classList.add('hidden');
+        }
+    
+        if (content.value.trim() === "") {
+            contentError.classList.remove('hidden');
+            isValid = false;
+        } else {
+            contentError.classList.add('hidden');
+        }
+    
+        if (tags.value.trim() === "") {
+            tagsError.classList.remove('hidden');
+            isValid = false;
+        } else {
+            tagsError.classList.add('hidden');
+        }
+    
+        return isValid;
+    }
+    </script>
+{% endblock %}

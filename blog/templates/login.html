@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">Login</h2>
+
+      {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li class="text-red-500 text-sm">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <form id="login-form" method="post" onsubmit="return validateLoginForm();">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" name="username" id="username" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p id="username-error" class="text-red-500 text-sm mt-1 hidden">Username is required.</p>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" name="password" id="password" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p id="password-error" class="text-red-500 text-sm mt-1 hidden">Password is required.</p>    
+            </div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg font-semibold">Login</button>
+        </form>
+        <p class="mt-4 text-sm text-center text-gray-600">
+            Don't have an account? 
+            <a href="{% url 'register' %}" class="text-blue-500 hover:underline">Sign up</a>.
+        </p>
+    </div>
+</div>
+
+<script>
+    function validateLoginForm() {
+        let isValid = true;
+        
+        const username = document.getElementById('username');
+        const password = document.getElementById('password');
+        const usernameError = document.getElementById('username-error');
+        const passwordError = document.getElementById('password-error');
+    
+        if (username.value.trim() === "") {
+            usernameError.classList.remove('hidden');
+            isValid = false;
+        } else {
+            usernameError.classList.add('hidden');
+        }
+    
+        if (password.value.trim() === "") {
+            passwordError.classList.remove('hidden');
+            isValid = false;
+        } else {
+            passwordError.classList.add('hidden');
+        }
+    
+        return isValid;
+    }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: blogdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  web:
+    build: .
+    command: >
+      sh -c "npm run build:clean &&
+        npm run build:tailwind &&
+        python manage.py collectstatic --noinput &&
+        gunicorn blog_project.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DEBUG=1
+      - DJANGO_DB_HOST=db
+      - DJANGO_DB_NAME=blogdb
+      - DJANGO_DB_USER=postgres
+      - DJANGO_DB_PASSWORD=123
+    deploy:
+      resources:
+        limits:
+          memory: 2g          
+          cpus: "1.0"
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
