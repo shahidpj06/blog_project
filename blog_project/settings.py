@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-=app)9prwxgcujo3&l7)ybs-a12tdl^t*#86gy_opmd$f-_uok
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
+ALLOWED_HOSTS = [] #'0.0.0.0', 'localhost' changed to empty because of not workig docker
 
 
 # Application definition
@@ -92,7 +92,7 @@ DATABASES = {
         'NAME': os.getenv('DJANGO_DB_NAME','blogdb'),
         'USER': os.getenv('DJANGO_DB_USER','postgres'),
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD','123'),
-        'HOST': os.getenv('DJANGO_DB_HOST', 'db'),
+        'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'), # changed to 'localhost' from 'db' because of not working in docker.
         'PORT': '5432',
     }
 }
