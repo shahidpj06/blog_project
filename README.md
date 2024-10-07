@@ -77,6 +77,36 @@ python manage.py migrate
   <pre><code>docker-compose down</code></pre>
   <p>This will stop and remove the containers when you're finished.</p>
 
+  <h2>Project Screenshots</h2>
+
+  <h3>1. Login Page</h3>
+  <img src="screenshots/login.png" alt="Login Page" width="600">
+
+  <h3>2. Signup Page</h3>
+  <img src="screenshots/signup.png" alt="Signup Page" width="600">
+
+  <h3>3. Home Page</h3>
+  <img src="screenshots/blog_list.png" alt="Home Page" width="600">
+
+  <h3>4. Create Blog Page</h3>
+  <img src="screenshots/create_blog.png" alt="Home Page" width="600">
+  
+  <h3>5. Blog Action Page</h3>
+  <img src="screenshots/blog_action.png" alt="Blog Action" width="600">
+
+  <h3>6. Blog Edit Page</h3>
+  <img src="screenshots/blog_edit.png" alt="Blog Edit" width="600">
+
+  <h3>7. Blog Delete Page</h3>
+  <img src="screenshots/blog_delete.png" alt="Blog Delete" width="600">
+
+  <h3>8. Profile Page</h3>
+  <img src="screenshots/profile.png" alt="Profile Page" width="600">
+
+  <h3>9. Edit Profile Page</h3>
+  <img src="screenshots/edit_profile.png" alt="Home Page" width="600">
+
+
 
   <h2>File Structure</h2>
   <p>The following is the file structure of the project:</p>
