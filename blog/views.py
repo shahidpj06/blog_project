@@ -54,17 +54,17 @@ def login_view(request):
             return redirect('login')
     return render(request, 'login.html')
 
-@login_required
+@login_required(login_url='login')
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
-@login_required
+@login_required(login_url='login')
 def profile(request):
     return render(request, 'profile.html')
 
-@login_required
+@login_required(login_url='login')
 def update_profile(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
 
@@ -99,7 +99,7 @@ def update_profile(request):
 
     return render(request, 'update_profile.html', context)
 
-@login_required
+@login_required(login_url='login')
 def delete_profile_image(request):
     if request.method == 'POST':
         profile = request.user.profile
@@ -122,7 +122,7 @@ def post_detail(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     return render(request, 'post_detail.html', {'post': post})
 
-@login_required
+@login_required(login_url='login')
 def create_post(request):
     if request.method == 'POST':
         title = request.POST['title']
@@ -145,7 +145,7 @@ def create_post(request):
         return redirect('post_list')
     return render(request, 'create_post.html')
 
-@login_required
+@login_required(login_url='login')
 def update_post(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     if request.user != post.author:
@@ -174,7 +174,7 @@ def update_post(request, pk):
         return redirect('post_detail', pk=pk)
     return render(request, 'update_post.html', {'post': post})
 
-@login_required
+@login_required(login_url='login')
 def delete_post(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     if request.user == post.author:
