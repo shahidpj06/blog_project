@@ -4,24 +4,24 @@
 
 {% block content %}
 
-        {% if messages %}
-            <ul class="mb-4">
-                {% for message in messages %}
-                    <li class="{% if message.tags == 'error' %}text-red-500{% else %}text-green-500{% endif %}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
 <div class=" max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6 mb-6">
-      <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Update Profile</h2>
-  
-      <div class="flex justify-center mb-6">
+    <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Update Profile</h2>
+    
+    <div class="flex justify-center mb-6">
         {% if user.profile.profile_picture %}
-            <img class="rounded-full w-32 h-32 object-cover shadow-md" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
-            <button id="deleteImageBtn" class="mt-4 text-sm text-red-500 hover:underline">Delete Image</button>
+        <img class="rounded-full w-32 h-32 object-cover shadow-md" src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+        <button id="deleteImageBtn" class="mt-4 text-sm text-red-500 hover:underline">Delete Image</button>
         {% else %}
-            <p>No profile picture uploaded.</p>
+        <p>No profile picture uploaded.</p>
         {% endif %}
     </div>
+    {% if messages %}
+        <ul class="mb-4">
+            {% for message in messages %}
+                <li class="{% if message.tags == 'error' %}text-red-500{% else %}text-green-500{% endif %}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
       <form id="profile-update-form" method="post" enctype="multipart/form-data" onsubmit="return validateProfileUpdateForm();">
         {% csrf_token %}
@@ -40,10 +40,11 @@
         
         <div class="mb-4">
           <label for="profile_picture" class="block text-sm font-medium text-gray-700">Profile Picture</label>
-          <input type="file" name="profile_picture" id="profile_picture" class="mt-1 p-2 block w-full">
+          <input type="file" name="profile_picture" id="profile_picture" class="mt-1 p-2 block w-full" accept="image/*">
         </div>
-        
-        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg font-semibold">Update Profile</button>
+        <div class="mt-6 flex justify-center space-x-4">
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg font-semibold">Update Profile</button>
+        </div>
       </form>
     </div>
     <div id="deleteImageModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
@@ -60,30 +61,30 @@
 
   <script>
 
-function validateProfileUpdateForm() {
-    let isValid = true;
+    function validateProfileUpdateForm() {
+        let isValid = true;
 
-    const username = document.getElementById('username');
-    const email = document.getElementById('email');
-    const usernameError = document.getElementById('username-error');
-    const emailError = document.getElementById('email-error');
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const usernameError = document.getElementById('username-error');
+        const emailError = document.getElementById('email-error');
 
-    if (username.value.trim() === "") {
-        usernameError.classList.remove('hidden');
-        isValid = false;
-    } else {
-        usernameError.classList.add('hidden');
+        if (username.value.trim() === "") {
+            usernameError.classList.remove('hidden');
+            isValid = false;
+        } else {
+            usernameError.classList.add('hidden');
+        }
+
+        if (email.value.trim() === "") {
+            emailError.classList.remove('hidden');
+            isValid = false;
+        } else {
+            emailError.classList.add('hidden');
+        }
+
+        return isValid;
     }
-
-    if (email.value.trim() === "") {
-        emailError.classList.remove('hidden');
-        isValid = false;
-    } else {
-        emailError.classList.add('hidden');
-    }
-
-    return isValid;
-}
 
     const deleteImageBtn = document.getElementById('deleteImageBtn');
     const deleteImageModal = document.getElementById('deleteImageModal');
@@ -105,13 +106,12 @@ function validateProfileUpdateForm() {
                 'X-CSRFToken': '{{ csrf_token }}',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ action: 'delete' })
+            body: JSON.stringify({ action: 'delete' }) //the data being sent to the server
         })
-        .then(response => response.json())
+        .then(response => response.json()) 
         .then(data => {
             if (data.success) {
                 location.reload(); 
-                alert('Error deleting image');
             }
         });
     });

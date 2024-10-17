@@ -11,15 +11,15 @@
     <header>
         <nav class="bg-gray-800 p-4">
             <div class="container mx-auto flex justify-between items-center">
-              <div class="text-white text-2xl font-semibold">
-                <a href="/">blogs.com</a>
-              </div>
+                <div class="text-white text-2xl font-semibold">
+                    <a href="/">blogs.com</a>
+                </div>
                 <div class="space-x-4">
                     <a href="{% url 'post_list' %}" class="text-gray-300 hover:text-white">HOME</a>
                     {% if user.is_authenticated %}
                         <a href="{% url 'profile' %}" class="text-gray-300 hover:text-white">PROFILE</a>
                         <a href="{% url 'create_post' %}" class="text-gray-300 hover:text-white">CREATE POST</a>
-                        <a id="logoutBtn" class="text-gray-300 hover:text-white">LOGOUT</a>
+                        <button id="logoutBtn" class="text-gray-300 hover:text-white">LOGOUT</button>
                     {% else %}
                         <a href="{% url 'login' %}" class="text-gray-300 hover:text-white">LOGIN</a>
                         <a href="{% url 'register' %}" class="text-gray-300 hover:text-white">REGISTER</a>
@@ -48,27 +48,22 @@
     </main>
 
     <script>
-        // Get DOM elements
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutModal = document.getElementById('logoutModal');
         const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
         const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
     
-        // Show the modal when Logout button is clicked
-        logoutBtn.addEventListener('click', function() {
-            logoutModal.classList.remove('hidden');
-        });
-    
-        // Close the modal if Cancel button is clicked
-        cancelLogoutBtn.addEventListener('click', function() {
-            logoutModal.classList.add('hidden');
-        });
-    
-        // Handle the logout process when Confirm button is clicked
-        confirmLogoutBtn.addEventListener('click', function() {
-            // Redirect to the Django logout URL
-            window.location.href = "{% url 'logout' %}";
-        });
+       logoutBtn.addEventListener('click', function() {
+        logoutModal.classList.remove('hidden');
+       })
+
+       cancelLogoutBtn.addEventListener('click', function() {
+        logoutModal.classList.add('hidden');
+       })
+
+       confirmLogoutBtn.addEventListener('click', function() {
+        window.location.href = '{% url "logout" %}';
+       })
     </script>
     
     

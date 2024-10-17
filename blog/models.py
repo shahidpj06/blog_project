@@ -10,13 +10,14 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
+# automatically create and save a corresponding Profile whenever a User instance is created or updated
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
+def save_user_profile(sender, instance, **kwargs): # syncing the profile to save when the user triggers for an update
     instance.profile.save()
 
 class BlogPost(models.Model):

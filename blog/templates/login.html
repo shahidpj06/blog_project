@@ -52,12 +52,12 @@
             usernameError.classList.add('hidden');
         }
     
-        if (password.value.trim() === "") {
+       if (password.value.trim() === '') {
             passwordError.classList.remove('hidden');
             isValid = false;
-        } else {
+       } else {
             passwordError.classList.add('hidden');
-        }
+       }
     
         return isValid;
     }

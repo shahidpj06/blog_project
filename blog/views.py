@@ -16,11 +16,10 @@ def register(request):
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
             return redirect('register')
-
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists.")
             return redirect('register')
-
+        
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
 
@@ -39,6 +38,7 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+        
         if not username or not password:
             messages.error(request, 'Please fill out all required fields.')
             return redirect('login')
@@ -72,12 +72,13 @@ def update_profile(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         profile_picture = request.FILES.get('profile_picture')
-
-        if not username:
-            messages.error(request, 'Username is required.')
+        
+        if User.objects.filter(username=username).exclude(pk=request.user.pk).exists():
+            messages.error(request, 'This username is already taken by another user.')
             return redirect('update_profile')
-        if not email:
-            messages.error(request, 'Email is required.')
+        
+        if User.objects.filter(email=email).exclude(pk=request.user.pk).exists():
+            messages.error(request, 'This email is already taken by another user.')
             return redirect('update_profile')
 
         user = request.user
